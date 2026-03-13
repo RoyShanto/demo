@@ -1,23 +1,46 @@
-const CACHE_NAME = 'demo-website-cache-v1';
+const CACHE_NAME = "demo-cache-v2";
 
 const urlsToCache = [
-  '/demo/',
-  '/demo/index.html',
-  '/demo/output.css',
-  '/demo/favicon.png',
-  '/demo/manifest.json'
+  "/demo/",
+  "/demo/index.html",
+  "/demo/output.css",
+  "/demo/favicon.png",
+  "/demo/manifest.json"
 ];
 
-self.addEventListener('install', (event) => {
+// Install and cache files
+self.addEventListener("install", (event) => {
+  self.skipWaiting(); // activate new SW immediately
+
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then((cache) => cache.addAll(urlsToCache))
   );
 });
 
-self.addEventListener('fetch', (event) => {
+// Activate and remove old caches
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
+
+  self.clients.claim(); // take control immediately
+});
+
+// Fetch from cache first
+self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request)
-      .then(response => response || fetch(event.request))
+      .then((response) => {
+        return response || fetch(event.request);
+      })
   );
 });
