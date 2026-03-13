@@ -1,9 +1,10 @@
 const CACHE_NAME = 'demo-website-cache-v1';
+
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/output.css',
-  '/favicon.png'
+  '/demo/',
+  '/demo/index.html',
+  '/demo/output.css',
+  '/demo/favicon.png'
 ];
 
 self.addEventListener('install', (event) => {
