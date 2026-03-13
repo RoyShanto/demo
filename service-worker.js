@@ -1,4 +1,7 @@
-const CACHE_NAME = "demo-cache-v11";
+const CACHE_PREFIX = "demo-cache-";
+const VERSION = "v12";
+
+const CACHE_NAME = CACHE_PREFIX + VERSION;
 
 const urlsToCache = [
   "/demo/",
@@ -25,7 +28,8 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
+          // delete only this project's old caches
+          if (key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME) {
             return caches.delete(key);
           }
         })
