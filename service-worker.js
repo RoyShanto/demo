@@ -1,4 +1,4 @@
-const CACHE_NAME = "demo-cache-v7";
+const CACHE_NAME = "demo-cache-v8";
 
 const urlsToCache = [
   "/demo/",
@@ -8,9 +8,9 @@ const urlsToCache = [
   "/demo/manifest.json"
 ];
 
-// Install and cache files
+// INSTALL
 self.addEventListener("install", (event) => {
-  self.skipWaiting(); // activate new SW immediately
+  self.skipWaiting();
 
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -18,7 +18,8 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// Activate and remove old caches
+
+// ACTIVATE
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,15 +33,60 @@ self.addEventListener("activate", (event) => {
     })
   );
 
-  self.clients.claim(); // take control immediately
+  self.clients.claim();
 });
 
-// Fetch from cache first
+
+// FETCH
 self.addEventListener("fetch", (event) => {
+
+  // HTML pages → NETWORK FIRST
+  if (event.request.mode === "navigate") {
+
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+
+          const responseClone = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+
+          return response;
+
+        })
+        .catch(() => {
+          return caches.match(event.request);
+        })
+    );
+
+    return;
+  }
+
+
+  // STATIC FILES → CACHE FIRST
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        return response || fetch(event.request);
+
+        if (response) {
+          return response;
+        }
+
+        return fetch(event.request).then((response) => {
+
+          const responseClone = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+
+          return response;
+
+        });
+
       })
   );
+
 });
