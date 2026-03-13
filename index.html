@@ -12,28 +12,21 @@
 </head>
 
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
-
     <!-- Header -->
     <h1 class="text-4xl font-bold text-blue-600 mb-4">Welcome to Demo Website</h1>
-    <h1 class="text-4xl font-bold text-blue-600 mb-4">Welcome to Demo Website</h1>
-    <h1 class="text-4xl font-bold text-blue-600 mb-4">V8</h1>
-
+    <h1 class="text-4xl font-bold text-blue-600 mb-4">V9</h1>
     <!-- Register Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/demo/service-worker.js').then(reg => {
-
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
-
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'activated') {
                             location.reload(); // reload page automatically
                         }
                     });
-
                 });
-
             });
         }
     </script>
