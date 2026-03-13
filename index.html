@@ -1,39 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo Website</title>
     <link rel="stylesheet" href="output.css">
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
 </head>
+
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
 
     <!-- Header -->
     <h1 class="text-4xl font-bold text-blue-600 mb-4">Welcome to Demo Website</h1>
 
-    <!-- Paragraph -->
-    <p class="text-gray-700 text-lg mb-6 text-center max-w-md">
-        This is a small Tailwind demo website. It works online and offline using a service worker.
-    </p>
-
-    <!-- Button -->
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Click Me
-    </button>
-
-    <!-- Footer -->
-    <footer class="mt-10 text-gray-500 text-sm">
-        &copy; 2026 Demo Website. All rights reserved.
-    </footer>
-
     <!-- Register Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/demo/service-worker.js')
-            .then(() => console.log('Service Worker Registered'))
-            .catch(err => console.log('Service Worker Registration Failed:', err));
+                .then(() => console.log('Service Worker Registered'))
+                .catch(err => console.log('Service Worker Registration Failed:', err));
         }
     </script>
 </body>
+
 </html>
